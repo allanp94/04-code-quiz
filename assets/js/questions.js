@@ -7,7 +7,7 @@ var questions = [
       "C - Both of the above",
       "D - All of the above",
     ],
-    correct: "b",
+    correct: "B - JavaScript is open and cross-platform.",
   },
   {
     question:
@@ -18,7 +18,7 @@ var questions = [
       "C - Both of the above.",
       "D - None of the above",
     ],
-    correct: "b",
+    correct: "B - local variable",
   },
   {
     question:
@@ -29,7 +29,7 @@ var questions = [
       "C - toPrecision()",
       "D - toLocaleString()",
     ],
-    correct: "b",
+    correct: "B - toFixed()",
   },
   {
     question:
@@ -37,10 +37,10 @@ var questions = [
     answers: [
       "A - charAt()",
       "B - charCodeAt()",
-      " C - concat()",
+      "C - concat()",
       "D - indexOf()",
     ],
-    correct: "b",
+    correct: "B - charCodeAt()",
   },
   {
     question:
@@ -51,7 +51,7 @@ var questions = [
       "C - substr()",
       "D - concat()",
     ],
-    correct: "a",
+    correct: "A - localeCompare()",
   },
   {
     question:
@@ -62,7 +62,7 @@ var questions = [
       "C - toString()",
       "D - substring()",
     ],
-    correct: "b",
+    correct: "B - toLowerCase()",
   },
   {
     question:
@@ -73,13 +73,13 @@ var questions = [
       "C - fontsize()",
       "D - italics()",
     ],
-    correct: "d",
+    correct: "D - italics()",
   },
   {
     question:
       "Q 9 - Which of the following function of Array object removes the last element from an array and returns that element?",
     answers: ["A - pop()", "B - push()", "C - join()", "D - map()"],
-    correct: "a",
+    correct: "A - pop()",
   },
   {
     question:
@@ -90,7 +90,7 @@ var questions = [
       "C - toString()",
       "D - unshift()",
     ],
-    correct: "a",
+    correct: "A - toSource()",
   },
   {
     question: "Q 2 - Can you assign a anonymous function to a variable?",
@@ -100,6 +100,6 @@ var questions = [
       "C - only if it is one line long.",
       "D - all functions are anonymous",
     ],
-    correct: "a",
+    correct: "A - true",
   },
 ];
