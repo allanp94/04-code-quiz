@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <div class="topbar">
-        <button class="btn-highscores">View High Scores</button>
+        <button class="highscores-btn">View High Scores</button>
         <p id="countdown">TIME: 0</p>
       </div>
       <div class="question-body">
@@ -20,7 +20,9 @@
           limit. Keep in mind that incorrect answers will penalize your
           score/time by ten seconds.
         </p>
-        <button class="btn start-btn start">Start Quiz</button>
+        <button class="btn start-btn start" onclick="createQuestion()">
+          Start Quiz
+        </button>
       </div>
     </div>
     <script src="./assets/js/script.js"></script>
