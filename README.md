@@ -47,10 +47,26 @@ The code quiz application is an awesome challenge of vanilla JavaScript that cha
 
 ## Screenshots
 
-![Screebshot](./)
-
+![Screenshot](./screenshots/homepage.png)
 
 ---
+
+![Screenshot](./screenshots/question.png)
+
+---
+
+![Screenshot](./screenshots/goodScore.png)
+
+---
+
+![Screenshot](./screenshots/outOfTime.png)
+
+---
+
+![Screenshot](./screenshots/highscores.png)
+
+---
+
 
 ## Link to Deployed Application
 
