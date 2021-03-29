@@ -5,34 +5,37 @@ var countdownEl = document.getElementById("countdown");
 var highScoreEl = document.querySelector(".highscores-btn");
 var submitInitialsEl = document.querySelector(".btn submit-btn");
 var containerEl = document.querySelector(".container");
-localStorage.setItem("page_html", containerEl.innerHTML);
+localStorage.setItem("page_html", containerEl.textContent);
 
 // if local storage has an item name users it sets the array with that info else empty
 var users = JSON.parse(localStorage.getItem("users")) || [];
 
 // initializing my setTimer variables globaly so i can clear them later
-var countDown;
+
 var delayNextQuestion;
+var countDown;
 
 function startTimer() {
   countDown = setInterval(function () {
     if (timeLeft > 0) {
-      countdownEl.innerText = "TIME: " + timeLeft;
+      countdownEl.textContent = "TIME: " + timeLeft;
       timeLeft--;
-    } else if (timeLeft === 0) {
+    } else if (timeLeft <= 0) {
       //call a function that the quiz is over and display the score
-      countdownEl.innerText = "TIME: 0";
+      countdownEl.textContent = "TIME: 0";
+      clearInterval(countDown);
       endQuiz();
     }
   }, 1000);
 }
 
 function createQuestion(questIndex) {
-  if (questIndex === questions.length) {
+  if (questIndex === questions.length || timeLeft <= 0) {
+    clearInterval(countDown);
     endQuiz();
   } else {
     //clear the existiing content
-    questionBodyEl.innerHTML = "";
+    questionBodyEl.textContent = "";
 
     //create the question head
     var questionHeadEl = document.createElement("h2");
@@ -63,20 +66,21 @@ function displayAnswer(bool) {
   textEl.className = "result-text";
 
   if (bool === true) {
-    textEl.innerHTML = "CORRECT";
+    textEl.textContent = "CORRECT";
   } else if (bool === false) {
-    textEl.innerHTML = "WRONG";
+    textEl.textContent = "WRONG";
   }
   questionBodyEl.appendChild(textEl);
 }
 
-function timerHandle(a) {
+function timerHandler(a) {
   if (a === 10) {
     timeLeft += 10;
   } else if (a === -10) {
     if (timeLeft > 10) {
       timeLeft -= 10;
     } else {
+      clearInterval(countDown);
       endQuiz();
     }
   }
@@ -85,38 +89,41 @@ function timerHandle(a) {
 function checkAnswer(button) {
   var buttonText = button.textContent;
   if (buttonText === questions[index - 1].correctAnswer) {
-    timerHandle(10);
+    timerHandler(10);
     displayAnswer(true);
   } else {
-    timerHandle(-10);
+    timerHandler(-10);
     displayAnswer(false);
   }
 }
 
 function buttonHandler(event) {
   //if the start button is clicked it does not check if the answer is correct
-
   if (event.target.matches(".start-btn")) {
     createQuestion(index);
     startTimer();
-
     // if the event.target matches the classname .question then the user clicked the button
   } else if (event.target.matches(".question-btn")) {
     checkAnswer(event.target);
     //delay the next answer for 1s
     delayNextQuestion = setTimeout(function () {
-      createQuestion(index);
+      if (timeLeft <= 0) {
+        clearInterval(countDown);
+        endQuiz();
+      } else {
+        createQuestion(index);
+      }
     }, 1200);
   }
 }
 
 function endQuiz() {
   //clearing the setTimeouts so they dont interfiar with the logic
-  clearInterval(countDown);
-  clearInterval(delayNextQuestion);
+  clearTimeout(delayNextQuestion);
+
   //clear the existiing content
-  questionBodyEl.innerHTML = "";
-  countdownEl.innerText = "TIME: 0";
+  questionBodyEl.textContent = "";
+  countdownEl.textContent = "TIME: 0";
 
   var questionHeadEl = document.createElement("h2");
   questionHeadEl.className = "question-head";
@@ -140,7 +147,7 @@ function endQuiz() {
 
   var userTextInfoEl = document.createElement("p");
   userTextInfoEl.className = "highscore-text";
-  userTextInfoEl.innerHTML = "Enter Initials: ";
+  userTextInfoEl.textContent = "Enter Initials: ";
   userInfoEl.appendChild(userTextInfoEl);
 
   var userInputEl = document.createElement("input");
@@ -149,16 +156,17 @@ function endQuiz() {
 
   var submitButtonEl = document.createElement("button");
   submitButtonEl.className = "btn submit-btn";
-  submitButtonEl.innerHTML = "Submit";
+  submitButtonEl.textContent = "Submit";
   userInfoEl.appendChild(submitButtonEl);
 
   questionBodyEl.appendChild(userInfoEl);
+  return;
 }
 
 function viewHighscores(users) {
-  highScoreEl.innerHTML = "";
-  document.querySelector(".topbar").innerHTML = "";
-  questionBodyEl.innerHTML = "";
+  highScoreEl.textContent = "";
+  document.querySelector(".topbar").textContent = "";
+  questionBodyEl.textContent = "";
 
   var highscoreDivEl = document.createElement("div");
   highscoreDivEl.className = "highscore-container";
@@ -174,30 +182,23 @@ function viewHighscores(users) {
 
   for (var i = 0; i < users.length; i++) {
     var highscoreLiEl = document.createElement("li");
-    highscoreLiEl.innerHTML =
+    highscoreLiEl.textContent =
       i + 1 + ". " + users[i].name + " -- " + users[i].score;
     highscoreUlEl.appendChild(highscoreLiEl);
   }
 
   var backButtonEl = document.createElement("button");
   backButtonEl.className = "btn back-btn";
-  backButtonEl.innerHTML = "Go back";
+  backButtonEl.textContent = "Go back";
   highscoreDivEl.appendChild(backButtonEl);
 
   var clearButtonEl = document.createElement("button");
   clearButtonEl.className = "btn clear-btn";
-  clearButtonEl.innerHTML = "Clear high scores";
+  clearButtonEl.textContent = "Clear high scores";
   highscoreDivEl.appendChild(clearButtonEl);
 
   questionBodyEl.appendChild(highscoreDivEl);
 }
-
-questionBodyEl.addEventListener("click", function (event) {
-  buttonHandler(event);
-});
-highScoreEl.addEventListener("click", function () {
-  viewHighscores(users);
-});
 
 function saveInitials() {
   var userInput = document.querySelector("input").value;
@@ -206,11 +207,18 @@ function saveInitials() {
     score: timeLeft,
   };
   users.push(userObj);
-  userInput.innerHTML = "";
+  userInput.textContent = "";
 
   localStorage.setItem("users", JSON.stringify(users));
   viewHighscores(users);
 }
+
+questionBodyEl.addEventListener("click", function (event) {
+  buttonHandler(event);
+});
+highScoreEl.addEventListener("click", function () {
+  viewHighscores(users);
+});
 
 //adding an event listener on a future element
 questionBodyEl.addEventListener("click", function (event) {
